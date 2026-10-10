@@ -154,10 +154,11 @@ notesList.addEventListener('click', async (event) => {
   setButtonsDisabled(true);
   setStatus('Deleting note…', 'loading');
   try {
+    // JSONPlaceholder simulates DELETE without persistence, so remove the note from this session's in-memory list only.
     await deleteNote(noteId);
     notes = notes.filter((note) => String(note.id) !== noteId);
     renderNotes();
-    setStatus(notes.length ? 'Note deleted.' : 'No notes yet. Create one to get started.', notes.length ? 'success' : 'empty');
+    setStatus(notes.length ? 'Note removed for this session.' : 'No notes yet. Create one to get started.', notes.length ? 'success' : 'empty');
   } catch (error) {
     setStatus(error instanceof Error ? error.message : 'Could not delete the note. Please try again.', 'error');
   } finally {

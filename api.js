@@ -23,12 +23,13 @@ async function request(url, options = {}) {
     }
     throw new Error(message);
   }
-  if (response.status === 204) return null;
-  return response.json();
+  const data = response.status === 204 ? null : await response.json();
+  return { data, status: response.status };
 }
 
 async function getNotes() {
-  return request(`${API_URL}?_limit=10`);
+  const { data } = await request(`${API_URL}?_limit=10`);
+  return data;
 }
 
 async function createNote(note) {
@@ -133,11 +134,11 @@ noteForm.addEventListener('submit', async (event) => {
   setButtonsDisabled(true);
   setStatus('Saving your note…', 'loading');
   try {
-    const created = await createNote({ title, body, userId: 1 });
+    const { data: created, status } = await createNote({ title, body, userId: 1 });
     notes = [{ ...created, title, body }, ...notes].slice(0, 10);
     renderNotes();
     noteForm.reset();
-    setStatus('Note saved.', 'success');
+    setStatus(`Note created (status ${status}, id ${created.id}).`, 'success');
   } catch (error) {
     setStatus(error instanceof Error ? error.message : 'Could not save your note. Please try again.', 'error');
   } finally {

@@ -106,11 +106,18 @@ VALUES ($1, $4, $5);
 COMMIT;
 ```
 
-## Index
+## Indexes
 
 ```sql
 CREATE INDEX idx_notes_user_updated_id
 ON notes (user_id, updated_at DESC, id DESC);
+
+CREATE INDEX idx_note_tags_user_tag_note
+ON note_tags (user_id, tag_id, note_id);
 ```
 
-This index supports the most common operation, retrieving one user's notes in newest-first order with a stable cursor, while avoiding a full scan and sort of other users' notes.
+`idx_notes_user_updated_id` supports the most common operation, retrieving one user's notes in newest-first order with a stable cursor, while avoiding a full scan and sort of other users' notes. `idx_note_tags_user_tag_note` supports filtering a user's notes by tag; the primary key starts with `note_id`, so it would not efficiently serve lookups that start from a selected tag.
+
+## SQL vs. NoSQL decision
+
+Choose PostgreSQL (SQL) for the source of truth. QuickNotes has stable entities with one-to-many and many-to-many relationships, needs foreign keys to prevent orphaned or cross-user tag links, and benefits from transactions when creating a note and its tag associations together. SQL constraints and indexes also fit the common owner-scoped list and tag-filter queries. A NoSQL document store could simplify storing an entire note with embedded tags and can scale horizontally, but duplicated tag data would complicate updates and filtering, and relational integrity would move into application code. The current access patterns and correctness requirements favor SQL; revisit that choice only if measured scale or access patterns materially change.

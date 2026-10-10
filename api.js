@@ -58,6 +58,14 @@ function setButtonsDisabled(disabled) {
 
 function renderNotes() {
   notesList.replaceChildren();
+  if (notes.length === 0) {
+    const emptyItem = document.createElement('li');
+    emptyItem.className = 'empty-state';
+    emptyItem.textContent = 'No notes found. Try loading again later.';
+    notesList.append(emptyItem);
+    return;
+  }
+
   for (const note of notes) {
     const item = document.createElement('li');
     item.className = 'note-item';
@@ -89,7 +97,7 @@ function renderNotes() {
 
 loadButton.addEventListener('click', async () => {
   setButtonsDisabled(true);
-  setStatus('Loading notes…', 'loading');
+  setStatus('Loading notes...', 'loading');
   try {
     const result = await getNotes();
     notes = Array.isArray(result) ? result.slice(0, 10) : [];
@@ -97,10 +105,10 @@ loadButton.addEventListener('click', async () => {
     if (notes.length === 0) {
       setStatus('No notes yet. Create one to get started.', 'empty');
     } else {
-      setStatus(`Loaded ${notes.length} notes.`, 'success');
+      setStatus('Loaded 10 notes from the server.', 'success');
     }
   } catch (error) {
-    setStatus(error instanceof Error ? error.message : 'Could not load notes. Please try again.', 'error');
+    setStatus('Could not load notes. Please check your connection and try again.', 'error');
   } finally {
     setButtonsDisabled(false);
   }

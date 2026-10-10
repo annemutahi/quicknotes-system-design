@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f4f1e9">
+    <title>QuickNotes | Your thoughts, in order</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="api.js" defer></script>
+  </head>
+  <body>
+    <main class="workspace">
+      <header class="topbar">
+        <a class="wordmark" href="index.html" aria-label="QuickNotes home">
+          <span class="wordmark-mark" aria-hidden="true">Q</span>
+          <span>quicknotes</span>
+        </a>
+        <span class="environment-label">API playground</span>
+      </header>
+
+      <section class="intro" aria-labelledby="page-title">
+        <p class="eyebrow">A little space to think</p>
+        <h1 id="page-title">Keep the good<br>thoughts close.</h1>
+        <p class="intro-copy">A simple notes desk, connected to the web.</p>
+      </section>
+
+      <section class="notes-area" aria-labelledby="notes-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Your notebook</p>
+            <h2 id="notes-heading">Recent notes</h2>
+          </div>
+          <button class="button button-secondary" id="load-btn" type="button">Load notes</button>
+        </div>
+        <p class="status" id="status" role="status" aria-live="polite">Load notes to get started.</p>
+        <ul class="notes-list" id="notes-list" aria-label="Notes"></ul>
+      </section>
+
+      <section class="compose-area" aria-labelledby="compose-heading">
+        <div class="compose-heading">
+          <p class="eyebrow">Make a note</p>
+          <h2 id="compose-heading">Catch it before it goes.</h2>
+        </div>
+        <form id="note-form" novalidate>
+          <div class="field">
+            <label for="title-input">Title <span class="field-hint">Required · 100 characters max</span></label>
+            <input id="title-input" name="title" type="text" maxlength="100" autocomplete="off" required>
+          </div>
+          <div class="field">
+            <label for="body-input">Note <span class="field-hint">Optional</span></label>
+            <textarea id="body-input" name="body" rows="4" placeholder="Start anywhere..."></textarea>
+          </div>
+          <div class="form-footer">
+            <span class="form-note">Small thoughts welcome.</span>
+            <button class="button button-primary" id="submit-btn" type="submit">Save note <span aria-hidden="true">↗</span></button>
+          </div>
+        </form>
+      </section>
+
+      <footer class="footer-note">Made for the thoughts worth keeping.</footer>
+    </main>
+  </body>
+</html>
